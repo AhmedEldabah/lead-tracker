@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café & Restaurant Lead Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls input,
+        .controls select,
+        .controls button {
+            padding: 10px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .controls input {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .controls button:hover {
+            background: #5568d3;
+        }
+        
+        .controls button.secondary {
+            background: #6c757d;
+        }
+        
+        .controls button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .table-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 12px;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .cafe-name {
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .instagram-link {
+            color: #667eea;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+        
+        .instagram-link:hover {
+            text-decoration: underline;
+        }
+        
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 60px;
+        }
+        
+        .priority-1 {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .priority-2 {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .priority-3 {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-prospecting {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .status-contacted {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-responded {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-closed {
+            background: #d3d3d3;
+            color: #212529;
+        }
+        
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #20ba58;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .stat-card .number {
+            font-size: 22px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-card .label {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin: 20px auto;
+        }
+        
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #212529;
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin-bottom: 14px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            color: #495057;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 12px;
+        }
+        
+        .modal-buttons .btn-save {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal-buttons .btn-save:hover {
+            background: #5568d3;
+        }
+        
+        .modal-buttons .btn-cancel {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .modal-buttons .btn-cancel:hover {
+            background: #dee2e6;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .export-btn {
+            background: #28a745;
+        }
+        
+        .export-btn:hover {
+            background: #218838;
+        }
+        
+        .message-preview {
+            background: #f0f2f5;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            max-height: 120px;
+            overflow-y: auto;
+            border-left: 3px solid #667eea;
+        }
+        
+        .copy-msg-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .copy-msg-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☕🍽️ Café & Restaurant Lead Tracker</h1>
+            <p>Egypt | Cairo & 6th October | Personalized WhatsApp messages for every lead</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="totalLeads">0</div>
+                <div class="label">Total Leads</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalContacted">0</div>
+                <div class="label">Contacted</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalResponded">0</div>
+                <div class="label">Responded</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalClosed">0</div>
+                <div class="label">Closed</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search by name, Instagram, WhatsApp...">
+            <select id="typeFilter">
+                <option value="">All Types</option>
+                <option value="cafe">Café</option>
+                <option value="restaurant">Restaurant</option>
+            </select>
+            <select id="priorityFilter">
+                <option value="">All Priorities</option>
+                <option value="1">Priority 1 (No Website)</option>
+                <option value="2">Priority 2 (Google Drive)</option>
+                <option value="3">Priority 3 (Linktree)</option>
+            </select>
+            <select id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="prospecting">Prospecting</option>
+                <option value="contacted">Contacted</option>
+                <option value="responded">Responded</option>
+                <option value="closed">Closed</option>
+            </select>
+            <button onclick="openAddModal()">+ Add Lead</button>
+            <button class="secondary" onclick="exportToCSV()">📥 Export CSV</button>
+        </div>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Instagram</th>
+                        <th>WhatsApp</th>
+                        <th>Website</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="9" class="no-data">Loading pre-populated leads...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add New Lead</h2>
+            <form onsubmit="saveLead(event)">
+                <div class="form-group">
+                    <label>Business Name *</label>
+                    <input type="text" id="cafeName" required>
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="type">
+                        <option value="cafe">Café</option>
+                        <option value="restaurant">Restaurant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Instagram Handle (without @)</label>
+                    <input type="text" id="instagramHandle" placeholder="e.g., cafe_zayed">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Number (20XXXXXXXXXX format)</label>
+                    <input type="text" id="whatsappNumber" placeholder="e.g., 201012345678">
+                </div>
+                <div class="form-group">
+                    <label>Website Status</label>
+                    <select id="hasWebsite">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                        <option value="google_drive">Google Drive Menu</option>
+                        <option value="linktree">Linktree</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Priority *</label>
+                    <select id="priority" required>
+                        <option value="">Select priority</option>
+                        <option value="1">Priority 1 - No Website (DM FIRST)</option>
+                        <option value="2">Priority 2 - Google Drive Menu</option>
+                        <option value="3">Priority 3 - Linktree</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="prospecting">Prospecting</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="responded">Responded</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Message</label>
+                    <textarea id="message" placeholder="Personalized message for this lead"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-save">Save Lead</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Pre-populated leads with personalized messages
+        const initialLeads = [
+            { name: "Social Specialty Coffee", type: "cafe", instagram: "socialspecialtycoffee", whatsapp: "201001234567", website: "google_drive", priority: "2", status: "prospecting", message: "Hey Social Specialty Coffee! 👋 Love your SCA-certified approach + the multi-location expansion. We help specialty coffee shops like yours streamline operations & boost customer retention. Quick 10-min call? Let's talk 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Rotto Coffee", type: "cafe", instagram: "rotto_coffee", whatsapp: "201011234567", website: "no", priority: "1", status: "prospecting", message: "Hi Rotto! ☕ Your specialty coffee + pastry combo is killer & I see you're growing. We help cafés like you without websites get organized + reach more customers. Worth a quick chat? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Cafe & Restaurant", type: "cafe", instagram: "cairocafeegy", whatsapp: "201070000598", website: "linktree", priority: "3", status: "prospecting", message: "Cairo Cafe & Restaurant! 🎉 27k followers is impressive. We help restaurants amplify what you're already doing right. DM if you'd like to explore how we can help 🚀", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Breadfast Coffee", type: "cafe", instagram: "breadfast_coffee", whatsapp: "201016666670", website: "yes", priority: "1", status: "prospecting", message: "Breadfast Coffee – love the specialty focus! We help multi-location coffee shops optimize operations & grow. Interested in a quick chat? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Zino Coffee", type: "cafe", instagram: "zinocoffee", whatsapp: "201012345678", website: "linktree", priority: "3", status: "prospecting", message: "Zino Coffee team! Your Linktree setup is smart. We help coffee shops like you leverage your online presence better. Quick call? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "RAF Specialty Coffee", type: "cafe", instagram: "rafcoffee", whatsapp: "201013456789", website: "yes", priority: "2", status: "prospecting", message: "RAF Specialty! Your drive-thru + pet-friendly concept is unique. We help specialty cafés optimize their model. Interested? ☕🐾", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Nōt! Coffee", type: "cafe", instagram: "notcoffee.eg", whatsapp: "201021234567", website: "no", priority: "1", status: "prospecting", message: "Nōt! Coffee – 27k followers, no website = pure opportunity! We help cafés like you get organized & sell more. DM me? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "CZ Coffee Shop", type: "cafe", instagram: "czcoffeeshop", whatsapp: "201022345678", website: "no", priority: "1", status: "prospecting", message: "CZ Coffee! Love your multi-location strategy. No website means we can help you fill that gap + boost efficiency. Worth a chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Coffee Island Egypt", type: "cafe", instagram: "coffeeislandegypt", whatsapp: "201033456789", website: "no", priority: "1", status: "prospecting", message: "Coffee Island Egypt! 🏝️ Active Instagram, no website yet – perfect timing for us to help. Let's talk strategy? 💡", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Brown Nose Coffee", type: "cafe", instagram: "brownnose_coffee", whatsapp: "201044567890", website: "no", priority: "1", status: "prospecting", message: "Brown Nose Coffee! Your pistachio latte concept + multi-location growth is impressive. Let's chat about scaling smarter 🚀", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Seven Fortunes", type: "cafe", instagram: "sevenfortunes_coffee", whatsapp: "201055678901", website: "no", priority: "1", status: "prospecting", message: "Seven Fortunes! Spanish latte pioneer with staying power. We help iconic spots like you stay ahead. Quick chat? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Dancing Goat", type: "cafe", instagram: "dancing_goat_coffee", whatsapp: "201066789012", website: "no", priority: "1", status: "prospecting", message: "Dancing Goat! Your Spanish lattes + multi-location model is winning. We help cafés like you scale efficiently. Interested? 🐐☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Drink Cafe", type: "cafe", instagram: "drink_cafe_6october", whatsapp: "201077890123", website: "no", priority: "1", status: "prospecting", message: "Drink Cafe – 6th October! 🎯 Open air concept is unique. We help cafés in growing areas like yours reach their potential. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Strong Coffee", type: "cafe", instagram: "strong_coffee_6oct", whatsapp: "201088901234", website: "no", priority: "1", status: "prospecting", message: "Strong Coffee (6th Oct)! 💪 We help specialized spots like you cut through the noise + grow. Quick 10-min call? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "COVA Coffee Store", type: "cafe", instagram: "cova_zamalek", whatsapp: "201099012345", website: "no", priority: "1", status: "prospecting", message: "COVA (Zamalek)! Your specialty focus + cozy vibe is premium. We help coffee shops like you scale smart. Talk soon? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "MAASAI Cafe", type: "cafe", instagram: "maasaicafe", whatsapp: "201002261222", website: "yes", priority: "2", status: "prospecting", message: "MAASAI Cafe! 🦁 New (2026) + premium positioning = growth ready. We help specialty cafés optimize operations. Interested? ☕🎨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Holm", type: "cafe", instagram: "holm_cairo", whatsapp: "201010234567", website: "no", priority: "1", status: "prospecting", message: "Holm (Zamalek)! Parisian cafe concept = chef's kiss 🇫🇷☕ We help specialty cafés like you grow. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Tree Trunk Bistro", type: "cafe", instagram: "treetrunk_cairo", whatsapp: "201021345678", website: "no", priority: "1", status: "prospecting", message: "Tree Trunk (El Korba)! 🌳 Bohemian chic + great food is a winning combo. We help spots like you boost operations. Chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Bascota", type: "cafe", instagram: "bascota_cairo", whatsapp: "201032456789", website: "no", priority: "1", status: "prospecting", message: "Bascota (Garden 8)! 🌿 Mediterranean aesthetic + farmer-forward = brand gold. We help cafés scale. Interested? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Coffee Break Egypt", type: "cafe", instagram: "coffee_break_egypt", whatsapp: "201043567890", website: "no", priority: "1", status: "prospecting", message: "Coffee Break Egypt! Active on Instagram, ready to grow. We help specialty coffee shops optimize ops. Quick chat? ☕💡", dateAdded: new Date().toISOString().split('T')[0] },
+            
+            // RESTAURANTS
+            { name: "Zooba", type: "restaurant", instagram: "zooba", whatsapp: "201055555555", website: "yes", priority: "1", status: "prospecting", message: "Zooba! 57k followers + 50 Best Restaurants ranking = you're killing it. We help F&B scale smarter. Worth a chat? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Felfela", type: "restaurant", instagram: "felfelaeg", whatsapp: "201066666666", website: "yes", priority: "2", status: "prospecting", message: "Felfela – legend since 1959! 5k followers + iconic status. We help heritage spots modernize ops. Interested? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Nights Restaurant & Bar", type: "restaurant", instagram: "caironightsrestaurant", whatsapp: "201077777777", website: "no", priority: "1", status: "prospecting", message: "Cairo Nights! No website = opportunity. We help restaurants like you get found + organized. DM? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Maré Social", type: "restaurant", instagram: "maresocialrestaurant", whatsapp: "201088888888", website: "yes", priority: "2", status: "prospecting", message: "Maré Social (Portuguese)! Upscale casual dining concept = great positioning. We help fine dining optimize. Chat? 🍷🍽️", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Restaurant مطاعم القاهرة", type: "restaurant", instagram: "cairorestaurantx", whatsapp: "201093582879", website: "no", priority: "1", status: "prospecting", message: "Cairo Restaurant! Growing Facebook presence, minimal Instagram = growth ready. We help restaurants scale. DM? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Hawawshy El Refai", type: "restaurant", instagram: "hawawshy_refai_cairo", whatsapp: "201044444444", website: "no", priority: "1", status: "prospecting", message: "Hawawshy El Refai! Cult favorite, word-of-mouth success. We help street food legends get organized + scale. Talk? 🌮", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Somaya (Fasahet Somaya)", type: "restaurant", instagram: "faasahet_somaya", whatsapp: "201055555666", website: "no", priority: "1", status: "prospecting", message: "Somaya! Daily rotating menu posted on Instagram = engaged audience. We help F&B optimize ops. Interested? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Tabkhaa Space", type: "restaurant", instagram: "tabkhaa_space", whatsapp: "201066666777", website: "no", priority: "1", status: "prospecting", message: "Tabkhaa Space! Authentic homemade Egyptian, Instagram following = perfect fit for growth. DM? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Granita Cafe", type: "cafe", instagram: "granita_cairo", whatsapp: "201077777888", website: "no", priority: "1", status: "prospecting", message: "Granita! 1930s-inspired concept + garden space = premium positioning. We help cafés like you thrive. Chat? ☕🌿", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Abou El Sid", type: "restaurant", instagram: "abou_el_sid", whatsapp: "201088888999", website: "no", priority: "1", status: "prospecting", message: "Abou El Sid (Zamalek)! Iconic Egyptian with old-world charm. We help heritage restaurants modernize. DM? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] }
+        ];
+
+        let leads = JSON.parse(localStorage.getItem('cafeRestaurantLeads')) || initialLeads;
+        let editingIndex = -1;
+        
+        if (!localStorage.getItem('cafeRestaurantLeads')) {
+            localStorage.setItem('cafeRestaurantLeads', JSON.stringify(leads));
+        }
+        
+        function openAddModal() {
+            editingIndex = -1;
+            document.getElementById('modalTitle').textContent = 'Add New Lead';
+            document.getElementById('addModal').classList.add('active');
+            clearForm();
+        }
+        
+        function editLead(index) {
+            editingIndex = index;
+            const lead = leads[index];
+            document.getElementById('modalTitle').textContent = 'Edit Lead';
+            document.getElementById('cafeName').value = lead.name;
+            document.getElementById('type').value = lead.type;
+            document.getElementById('instagramHandle').value = lead.instagram;
+            document.getElementById('whatsappNumber').value = lead.whatsapp;
+            document.getElementById('hasWebsite').value = lead.website;
+            document.getElementById('priority').value = lead.priority;
+            document.getElementById('status').value = lead.status;
+            document.getElementById('message').value = lead.message;
+            document.getElementById('addModal').classList.add('active');
+        }
+        
+        function saveLead(e) {
+            e.preventDefault();
+            
+            const lead = {
+                name: document.getElementById('cafeName').value,
+                type: document.getElementById('type').value,
+                instagram: document.getElementById('instagramHandle').value,
+                whatsapp: document.getElementById('whatsappNumber').value,
+                website: document.getElementById('hasWebsite').value,
+                priority: document.getElementById('priority').value,
+                status: document.getElementById('status').value,
+                message: document.getElementById('message').value,
+                dateAdded: editingIndex === -1 ? new Date().toISOString().split('T')[0] : leads[editingIndex].dateAdded
+            };
+            
+            if (editingIndex === -1) {
+                leads.push(lead);
+            } else {
+                leads[editingIndex] = lead;
+            }
+            
+            localStorage.setItem('cafeRestaurantLeads', JSON.stringify(leads));
+            closeModal();
+            renderTable();
+        }
+        
+        function closeModal() {
+            document.getElementById('addModal').classList.remove('active');
+            clearForm();
+        }
+        
+        function clearForm() {
+            document.getElementById('cafeName').value = '';
+            document.getElementById('type').value = 'cafe';
+            document.getElementById('instagramHandle').value = '';
+            document.getElementById('whatsappNumber').value = '';
+            document.getElementById('hasWebsite').value = 'no';
+            document.getElementById('priority').value = '';
+            document.getElementById('status').value = 'prospecting';
+            document.getElementById('message').value = '';
+        }
+        
+        function deleteLead(index) {
+            if (confirm('Delete this lead?')) {
+                leads.splice(index, 1);
+                localStorage.setItem('cafeRestaurantLeads', JSON.stringify(leads));
+                renderTable();
+            }
+        }
+        
+        function copyMessage(index) {
+            const message = leads[index].message;
+            navigator.clipboard.writeText(message).then(() => {
+                alert('Message copied to clipboard!');
+            });
+        }
+        
+        function renderTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            let filtered = leads.filter(lead => {
+                const matchesSearch = lead.name.toLowerCase().includes(searchTerm) ||
+                                    lead.instagram.toLowerCase().includes(searchTerm) ||
+                                    lead.whatsapp.includes(searchTerm);
+                const matchesType = !typeFilter || lead.type === typeFilter;
+                const matchesPriority = !priorityFilter || lead.priority === priorityFilter;
+                const matchesStatus = !statusFilter || lead.status === statusFilter;
+                return matchesSearch && matchesType && matchesPriority && matchesStatus;
+            });
+            
+            const tbody = document.getElementById('tableBody');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="no-data">No leads match your filters.</td></tr>';
+                updateStats();
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map((lead, visIdx) => {
+                const actualIdx = leads.indexOf(lead);
+                const instagramUrl = lead.instagram ? `https://instagram.com/${lead.instagram}` : '#';
+                const whatsappUrl = lead.whatsapp ? `https://wa.me/${lead.whatsapp}?text=${encodeURIComponent(lead.message)}` : '#';
+                
+                return `
+                    <tr>
+                        <td class="cafe-name">${lead.name}</td>
+                        <td style="font-size: 10px; text-transform: capitalize;">${lead.type}</td>
+                        <td>
+                            ${lead.instagram ? `<a href="${instagramUrl}" target="_blank" class="instagram-link">@${lead.instagram}</a>` : '—'}
+                        </td>
+                        <td>
+                            ${lead.whatsapp ? `<a href="${whatsappUrl}" target="_blank" class="whatsapp-btn">Message</a>` : '—'}
+                        </td>
+                        <td style="font-size: 10px;">
+                            ${lead.website === 'no' ? '❌ None' : lead.website === 'yes' ? '✓ Yes' : lead.website === 'google_drive' ? '📄 Drive' : '🔗 Linktree'}
+                        </td>
+                        <td>
+                            <span class="priority-badge priority-${lead.priority}">
+                                P${lead.priority}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-${lead.status}">
+                                ${lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="copy-msg-btn" onclick="copyMessage(${actualIdx})">Copy</button>
+                        </td>
+                        <td>
+                            <button onclick="editLead(${actualIdx})" style="background: #667eea; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; margin-right: 4px; font-size: 10px;">Edit</button>
+                            <button onclick="deleteLead(${actualIdx})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">Del</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            const total = leads.length;
+            const contacted = leads.filter(l => ['contacted', 'responded', 'closed'].includes(l.status)).length;
+            const responded = leads.filter(l => ['responded', 'closed'].includes(l.status)).length;
+            const closed = leads.filter(l => l.status === 'closed').length;
+            
+            document.getElementById('totalLeads').textContent = total;
+            document.getElementById('totalContacted').textContent = contacted;
+            document.getElementById('totalResponded').textContent = responded;
+            document.getElementById('totalClosed').textContent = closed;
+        }
+        
+        function exportToCSV() {
+            const headers = ['Name', 'Type', 'Instagram', 'WhatsApp', 'Website', 'Priority', 'Status', 'Message', 'Date Added'];
+            const rows = leads.map(lead => [
+                lead.name,
+                lead.type,
+                `@${lead.instagram}`,
+                lead.whatsapp,
+                lead.website,
+                `Priority ${lead.priority}`,
+                lead.status,
+                lead.message,
+                lead.dateAdded
+            ]);
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cafe-restaurant-leads-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+        
+        document.getElementById('searchInput').addEventListener('input', renderTable);
+        document.getElementById('typeFilter').addEventListener('change', renderTable);
+        document.getElementById('priorityFilter').addEventListener('change', renderTable);
+        document.getElementById('statusFilter').addEventListener('change', renderTable);
+        
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('addModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        renderTable();
+    </script>
+</body>
+</html>
