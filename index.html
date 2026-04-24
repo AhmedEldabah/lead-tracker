@@ -374,6 +374,163 @@
         .copy-msg-btn:hover {
             background: #5a6268;
         }
+
+        /* Find Leads Panel */
+        .find-leads-panel {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .find-leads-panel.active {
+            display: block;
+        }
+
+        .find-leads-panel h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #212529;
+        }
+
+        .find-leads-panel p {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 14px;
+        }
+
+        .search-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+        }
+
+        .search-link-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .search-link-btn:hover {
+            opacity: 0.85;
+            color: white;
+        }
+
+        .search-link-btn.google {
+            background: #4285f4;
+        }
+
+        .search-link-btn.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .search-link-btn.maps {
+            background: #34a853;
+        }
+
+        /* ── Mobile Responsive ── */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .controls input,
+            .controls select,
+            .controls button {
+                min-width: unset;
+                width: 100%;
+            }
+
+            /* Convert table to card layout */
+            table {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: block;
+            }
+
+            tr {
+                display: block;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                border: 1px solid #e9ecef;
+                background: white;
+                overflow: hidden;
+            }
+
+            tr:hover {
+                background: white;
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #f0f0f0;
+                min-height: 40px;
+                font-size: 13px;
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 11px;
+                color: #6c757d;
+                text-transform: uppercase;
+                min-width: 76px;
+                flex-shrink: 0;
+            }
+
+            td.no-data {
+                display: block;
+            }
+
+            td.no-data::before {
+                display: none;
+            }
+
+            .modal-content {
+                width: 96%;
+                padding: 18px;
+                max-height: 92vh;
+                overflow-y: auto;
+                margin: 16px auto;
+            }
+
+            .search-links {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -423,7 +580,28 @@
                 <option value="closed">Closed</option>
             </select>
             <button onclick="openAddModal()">+ Add Lead</button>
+            <button style="background:#e83e8c;" id="findLeadsBtn" onclick="toggleFindLeads()">🔍 Find Leads</button>
             <button class="secondary" onclick="exportToCSV()">📥 Export CSV</button>
+        </div>
+
+        <div class="find-leads-panel" id="findLeadsPanel">
+            <h3>🔍 Find More Leads on Google & Instagram</h3>
+            <p>Click any link below to open a targeted search in a new tab. Find new cafés and restaurants, then add them with the "+ Add Lead" button.</p>
+            <div class="search-links">
+                <a href="https://www.google.com/search?q=cafe+cairo+no+website+instagram" target="_blank" class="search-link-btn google">🔍 Google: Cafés Cairo (No Website)</a>
+                <a href="https://www.google.com/search?q=specialty+coffee+cairo+instagram" target="_blank" class="search-link-btn google">🔍 Google: Specialty Coffee Cairo</a>
+                <a href="https://www.google.com/search?q=cafe+%226th+october%22+cairo+instagram" target="_blank" class="search-link-btn google">🔍 Google: Cafés 6th October</a>
+                <a href="https://www.google.com/search?q=new+restaurant+cairo+2024+2025+instagram" target="_blank" class="search-link-btn google">🔍 Google: New Cairo Restaurants</a>
+                <a href="https://www.google.com/search?q=restaurant+zamalek+cairo+instagram+no+website" target="_blank" class="search-link-btn google">🔍 Google: Zamalek Restaurants</a>
+                <a href="https://www.instagram.com/explore/tags/cairocafe/" target="_blank" class="search-link-btn instagram">📸 Instagram: #cairocafe</a>
+                <a href="https://www.instagram.com/explore/tags/cairocoffee/" target="_blank" class="search-link-btn instagram">📸 Instagram: #cairocoffee</a>
+                <a href="https://www.instagram.com/explore/tags/cairorestaurant/" target="_blank" class="search-link-btn instagram">📸 Instagram: #cairorestaurant</a>
+                <a href="https://www.instagram.com/explore/tags/egyptcafe/" target="_blank" class="search-link-btn instagram">📸 Instagram: #egyptcafe</a>
+                <a href="https://www.instagram.com/explore/tags/6octoberlife/" target="_blank" class="search-link-btn instagram">📸 Instagram: #6octoberlife</a>
+                <a href="https://www.google.com/maps/search/cafes+in+Cairo+Egypt" target="_blank" class="search-link-btn maps">📍 Maps: Cafés in Cairo</a>
+                <a href="https://www.google.com/maps/search/restaurants+in+Cairo+Egypt" target="_blank" class="search-link-btn maps">📍 Maps: Restaurants in Cairo</a>
+                <a href="https://www.google.com/maps/search/cafes+6th+October+City+Egypt" target="_blank" class="search-link-btn maps">📍 Maps: Cafés 6th October City</a>
+            </div>
         </div>
         
         <div class="table-wrapper">
@@ -513,48 +691,59 @@
     </div>
 
     <script>
-        // Pre-populated leads with personalized messages
+        // Pre-populated leads with personalized messages — pitch: we build your website + free mockup
         const initialLeads = [
-            { name: "Social Specialty Coffee", type: "cafe", instagram: "socialspecialtycoffee", whatsapp: "201001234567", website: "google_drive", priority: "2", status: "prospecting", message: "Hey Social Specialty Coffee! 👋 Love your SCA-certified approach + the multi-location expansion. We help specialty coffee shops like yours streamline operations & boost customer retention. Quick 10-min call? Let's talk 🤝", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Rotto Coffee", type: "cafe", instagram: "rotto_coffee", whatsapp: "201011234567", website: "no", priority: "1", status: "prospecting", message: "Hi Rotto! ☕ Your specialty coffee + pastry combo is killer & I see you're growing. We help cafés like you without websites get organized + reach more customers. Worth a quick chat? 💬", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Cairo Cafe & Restaurant", type: "cafe", instagram: "cairocafeegy", whatsapp: "201070000598", website: "linktree", priority: "3", status: "prospecting", message: "Cairo Cafe & Restaurant! 🎉 27k followers is impressive. We help restaurants amplify what you're already doing right. DM if you'd like to explore how we can help 🚀", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Breadfast Coffee", type: "cafe", instagram: "breadfast_coffee", whatsapp: "201016666670", website: "yes", priority: "1", status: "prospecting", message: "Breadfast Coffee – love the specialty focus! We help multi-location coffee shops optimize operations & grow. Interested in a quick chat? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Zino Coffee", type: "cafe", instagram: "zinocoffee", whatsapp: "201012345678", website: "linktree", priority: "3", status: "prospecting", message: "Zino Coffee team! Your Linktree setup is smart. We help coffee shops like you leverage your online presence better. Quick call? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "RAF Specialty Coffee", type: "cafe", instagram: "rafcoffee", whatsapp: "201013456789", website: "yes", priority: "2", status: "prospecting", message: "RAF Specialty! Your drive-thru + pet-friendly concept is unique. We help specialty cafés optimize their model. Interested? ☕🐾", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Nōt! Coffee", type: "cafe", instagram: "notcoffee.eg", whatsapp: "201021234567", website: "no", priority: "1", status: "prospecting", message: "Nōt! Coffee – 27k followers, no website = pure opportunity! We help cafés like you get organized & sell more. DM me? 💬", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "CZ Coffee Shop", type: "cafe", instagram: "czcoffeeshop", whatsapp: "201022345678", website: "no", priority: "1", status: "prospecting", message: "CZ Coffee! Love your multi-location strategy. No website means we can help you fill that gap + boost efficiency. Worth a chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Coffee Island Egypt", type: "cafe", instagram: "coffeeislandegypt", whatsapp: "201033456789", website: "no", priority: "1", status: "prospecting", message: "Coffee Island Egypt! 🏝️ Active Instagram, no website yet – perfect timing for us to help. Let's talk strategy? 💡", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Brown Nose Coffee", type: "cafe", instagram: "brownnose_coffee", whatsapp: "201044567890", website: "no", priority: "1", status: "prospecting", message: "Brown Nose Coffee! Your pistachio latte concept + multi-location growth is impressive. Let's chat about scaling smarter 🚀", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Seven Fortunes", type: "cafe", instagram: "sevenfortunes_coffee", whatsapp: "201055678901", website: "no", priority: "1", status: "prospecting", message: "Seven Fortunes! Spanish latte pioneer with staying power. We help iconic spots like you stay ahead. Quick chat? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Dancing Goat", type: "cafe", instagram: "dancing_goat_coffee", whatsapp: "201066789012", website: "no", priority: "1", status: "prospecting", message: "Dancing Goat! Your Spanish lattes + multi-location model is winning. We help cafés like you scale efficiently. Interested? 🐐☕", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Drink Cafe", type: "cafe", instagram: "drink_cafe_6october", whatsapp: "201077890123", website: "no", priority: "1", status: "prospecting", message: "Drink Cafe – 6th October! 🎯 Open air concept is unique. We help cafés in growing areas like yours reach their potential. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Strong Coffee", type: "cafe", instagram: "strong_coffee_6oct", whatsapp: "201088901234", website: "no", priority: "1", status: "prospecting", message: "Strong Coffee (6th Oct)! 💪 We help specialized spots like you cut through the noise + grow. Quick 10-min call? ☕", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "COVA Coffee Store", type: "cafe", instagram: "cova_zamalek", whatsapp: "201099012345", website: "no", priority: "1", status: "prospecting", message: "COVA (Zamalek)! Your specialty focus + cozy vibe is premium. We help coffee shops like you scale smart. Talk soon? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "MAASAI Cafe", type: "cafe", instagram: "maasaicafe", whatsapp: "201002261222", website: "yes", priority: "2", status: "prospecting", message: "MAASAI Cafe! 🦁 New (2026) + premium positioning = growth ready. We help specialty cafés optimize operations. Interested? ☕🎨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Holm", type: "cafe", instagram: "holm_cairo", whatsapp: "201010234567", website: "no", priority: "1", status: "prospecting", message: "Holm (Zamalek)! Parisian cafe concept = chef's kiss 🇫🇷☕ We help specialty cafés like you grow. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Tree Trunk Bistro", type: "cafe", instagram: "treetrunk_cairo", whatsapp: "201021345678", website: "no", priority: "1", status: "prospecting", message: "Tree Trunk (El Korba)! 🌳 Bohemian chic + great food is a winning combo. We help spots like you boost operations. Chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Bascota", type: "cafe", instagram: "bascota_cairo", whatsapp: "201032456789", website: "no", priority: "1", status: "prospecting", message: "Bascota (Garden 8)! 🌿 Mediterranean aesthetic + farmer-forward = brand gold. We help cafés scale. Interested? ☕", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Coffee Break Egypt", type: "cafe", instagram: "coffee_break_egypt", whatsapp: "201043567890", website: "no", priority: "1", status: "prospecting", message: "Coffee Break Egypt! Active on Instagram, ready to grow. We help specialty coffee shops optimize ops. Quick chat? ☕💡", dateAdded: new Date().toISOString().split('T')[0] },
-            
+            // CAFÉS
+            { name: "Social Specialty Coffee", type: "cafe", instagram: "socialspecialtycoffee", whatsapp: "201001234567", website: "google_drive", priority: "2", status: "prospecting", message: "Hey Social Specialty Coffee! 👋 Love the SCA-certified approach + multi-location growth. A Google Drive menu is a start, but a proper website would let you showcase your story, menu & ordering in one place. We build websites for specialty cafés — and we'd love to send you a FREE custom mockup so you can see exactly what yours could look like before committing anything. Interested? ☕✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Rotto Coffee", type: "cafe", instagram: "rotto_coffee", whatsapp: "201011234567", website: "no", priority: "1", status: "prospecting", message: "Hi Rotto! ☕ Your specialty coffee + pastry combo is amazing — but with no website, you're invisible to so many potential customers. We build websites for cafés just like yours, and we'll send you a FREE custom mockup first so you can see the design before saying yes. No cost, no commitment — just your café, beautifully online. Wanna see it? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Cafe & Restaurant", type: "cafe", instagram: "cairocafeegy", whatsapp: "201070000598", website: "linktree", priority: "3", status: "prospecting", message: "Cairo Cafe & Restaurant! 🎉 27k followers is impressive — imagine what a real website could do vs a Linktree. Full menu, brand story, online presence all in one place. We build websites for cafés and we'll send you a FREE mockup tailored to your brand first — you see it, love it, then we talk. Worth a look? 🚀", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Breadfast Coffee", type: "cafe", instagram: "breadfast_coffee", whatsapp: "201016666670", website: "yes", priority: "1", status: "prospecting", message: "Breadfast Coffee! Multi-location specialty focus is seriously impressive ☕ We build upgraded websites for coffee brands — menu, online ordering, loyalty page — and we'd love to show you what a redesigned site could look like. We'll create a FREE mockup just for you, no strings attached. Quick chat? ✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Zino Coffee", type: "cafe", instagram: "zinocoffee", whatsapp: "201012345678", website: "linktree", priority: "3", status: "prospecting", message: "Zino Coffee! ☕ Linktree is a smart start — but a real website would let you show your full menu, tell your story, and turn followers into regulars. We build custom websites for cafés and we'll send you a FREE mockup designed around your brand. You see the design first, then decide. Want to see it? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "RAF Specialty Coffee", type: "cafe", instagram: "rafcoffee", whatsapp: "201013456789", website: "yes", priority: "2", status: "prospecting", message: "RAF Specialty! Drive-thru + pet-friendly = a seriously unique brand that deserves a website to match 🐾☕ We build custom websites for specialty cafés and we'd love to show you what yours could look like. We'll put together a FREE mockup for you — no commitment, just your brand brought to life online. Interested? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Nōt! Coffee", type: "cafe", instagram: "notcoffee.eg", whatsapp: "201021234567", website: "no", priority: "1", status: "prospecting", message: "Nōt! Coffee — 27k followers but no website means you're leaving serious money on the table 😅 We build clean, fast websites for cafés just like yours. We'll do a FREE custom mockup first — you see the full design, love it, then we build it. No catch. DM us? ☕💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "CZ Coffee Shop", type: "cafe", instagram: "czcoffeeshop", whatsapp: "201022345678", website: "no", priority: "1", status: "prospecting", message: "CZ Coffee! Multi-location strategy is strong ☕ — one thing missing is a proper website to tie it all together. We build websites for coffee shops and we'll send you a FREE mockup showing all your locations, menu, and vibe before you commit to anything. Worth a chat? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Coffee Island Egypt", type: "cafe", instagram: "coffeeislandegypt", whatsapp: "201033456789", website: "no", priority: "1", status: "prospecting", message: "Coffee Island Egypt! 🏝️ Active Instagram + zero website = a huge untapped opportunity. We build websites for cafés — menus, brand story, the works — and we'll do a FREE custom mockup so you can see exactly what it'd look like before saying yes. Sound good? 💡", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Brown Nose Coffee", type: "cafe", instagram: "brownnose_coffee", whatsapp: "201044567890", website: "no", priority: "1", status: "prospecting", message: "Brown Nose Coffee! Pistachio latte pioneer + multi-location growth = a brand ready for a proper website 🔥 We'll build it for you — menu, ordering, brand story — and we'll send you a FREE custom mockup first so you can see the design before committing anything. Let's chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Seven Fortunes", type: "cafe", instagram: "sevenfortunes_coffee", whatsapp: "201055678901", website: "no", priority: "1", status: "prospecting", message: "Seven Fortunes! Spanish latte pioneer with serious staying power ☕✨ You deserve a website that matches your brand — and we'd love to build it. We'll start with a FREE custom mockup so you can see exactly what it looks like before any commitment. Quick DM? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Dancing Goat", type: "cafe", instagram: "dancing_goat_coffee", whatsapp: "201066789012", website: "no", priority: "1", status: "prospecting", message: "Dancing Goat! Spanish lattes + multi-location model = a brand ready for a real website 🐐☕ We build them for cafés and we'd love to send you a FREE mockup — your brand, your menu, your vibe — before you commit to anything. No cost to see it. Interested? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Drink Cafe", type: "cafe", instagram: "drink_cafe_6october", whatsapp: "201077890123", website: "no", priority: "1", status: "prospecting", message: "Drink Cafe 6th October! 🎯 Open-air concept is genuinely unique — that deserves a website that shows it off. We build websites for cafés in 6th October and we'll do a FREE custom mockup just for you so you can see what it'd look like before saying yes. DM? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Strong Coffee", type: "cafe", instagram: "strong_coffee_6oct", whatsapp: "201088901234", website: "no", priority: "1", status: "prospecting", message: "Strong Coffee 6th October! 💪 A website would let new customers find you, browse your menu, and come in. We build them for cafés like yours and we'll do a FREE custom mockup first — you see the design, no strings attached. Quick chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "COVA Coffee Store", type: "cafe", instagram: "cova_zamalek", whatsapp: "201099012345", website: "no", priority: "1", status: "prospecting", message: "COVA (Zamalek)! Premium specialty + cozy vibe = a brand that deserves a proper website ☕✨ We build websites for coffee shops and we'd love to show you what yours could look like — FREE mockup, zero commitment. Talk soon? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "MAASAI Cafe", type: "cafe", instagram: "maasaicafe", whatsapp: "201002261222", website: "yes", priority: "2", status: "prospecting", message: "MAASAI Cafe! 🦁 New in 2026 and already premium positioned — imagine a website that tells that story from day one. We build custom sites for specialty cafés and we'd love to create a FREE mockup so you can see exactly what's possible. Interested? ☕🎨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Holm", type: "cafe", instagram: "holm_cairo", whatsapp: "201010234567", website: "no", priority: "1", status: "prospecting", message: "Holm (Zamalek)! Parisian café concept done beautifully 🇫🇷☕ That same elegance deserves to exist online. We build websites for cafés like yours and we'll send you a FREE custom mockup first — your brand, your aesthetic — before any commitment. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Tree Trunk Bistro", type: "cafe", instagram: "treetrunk_cairo", whatsapp: "201021345678", website: "no", priority: "1", status: "prospecting", message: "Tree Trunk (El Korba)! 🌳 Bohemian chic + great food = a brand people want to share — but they need a website to find you first. We build custom sites for cafés and we'll send you a FREE mockup before you commit to anything. Chat? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Bascota", type: "cafe", instagram: "bascota_cairo", whatsapp: "201032456789", website: "no", priority: "1", status: "prospecting", message: "Bascota (Garden 8)! 🌿 Mediterranean aesthetic + farmer-forward brand = premium positioning that needs a website to match. We'd love to build it — starting with a FREE custom mockup so you can see the design first. Interested? ☕", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Coffee Break Egypt", type: "cafe", instagram: "coffee_break_egypt", whatsapp: "201043567890", website: "no", priority: "1", status: "prospecting", message: "Coffee Break Egypt! Great Instagram presence ☕ — but without a website, customers can't find your full story or menu online. We build websites for coffee shops and we'd love to show you a FREE mockup first — no commitment, just your café beautifully designed. Quick chat? 💡", dateAdded: new Date().toISOString().split('T')[0] },
+
             // RESTAURANTS
-            { name: "Zooba", type: "restaurant", instagram: "zooba", whatsapp: "201055555555", website: "yes", priority: "1", status: "prospecting", message: "Zooba! 57k followers + 50 Best Restaurants ranking = you're killing it. We help F&B scale smarter. Worth a chat? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Felfela", type: "restaurant", instagram: "felfelaeg", whatsapp: "201066666666", website: "yes", priority: "2", status: "prospecting", message: "Felfela – legend since 1959! 5k followers + iconic status. We help heritage spots modernize ops. Interested? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Cairo Nights Restaurant & Bar", type: "restaurant", instagram: "caironightsrestaurant", whatsapp: "201077777777", website: "no", priority: "1", status: "prospecting", message: "Cairo Nights! No website = opportunity. We help restaurants like you get found + organized. DM? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Maré Social", type: "restaurant", instagram: "maresocialrestaurant", whatsapp: "201088888888", website: "yes", priority: "2", status: "prospecting", message: "Maré Social (Portuguese)! Upscale casual dining concept = great positioning. We help fine dining optimize. Chat? 🍷🍽️", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Cairo Restaurant مطاعم القاهرة", type: "restaurant", instagram: "cairorestaurantx", whatsapp: "201093582879", website: "no", priority: "1", status: "prospecting", message: "Cairo Restaurant! Growing Facebook presence, minimal Instagram = growth ready. We help restaurants scale. DM? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Hawawshy El Refai", type: "restaurant", instagram: "hawawshy_refai_cairo", whatsapp: "201044444444", website: "no", priority: "1", status: "prospecting", message: "Hawawshy El Refai! Cult favorite, word-of-mouth success. We help street food legends get organized + scale. Talk? 🌮", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Somaya (Fasahet Somaya)", type: "restaurant", instagram: "faasahet_somaya", whatsapp: "201055555666", website: "no", priority: "1", status: "prospecting", message: "Somaya! Daily rotating menu posted on Instagram = engaged audience. We help F&B optimize ops. Interested? 🍽️", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Tabkhaa Space", type: "restaurant", instagram: "tabkhaa_space", whatsapp: "201066666777", website: "no", priority: "1", status: "prospecting", message: "Tabkhaa Space! Authentic homemade Egyptian, Instagram following = perfect fit for growth. DM? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Granita Cafe", type: "cafe", instagram: "granita_cairo", whatsapp: "201077777888", website: "no", priority: "1", status: "prospecting", message: "Granita! 1930s-inspired concept + garden space = premium positioning. We help cafés like you thrive. Chat? ☕🌿", dateAdded: new Date().toISOString().split('T')[0] },
-            { name: "Abou El Sid", type: "restaurant", instagram: "abou_el_sid", whatsapp: "201088888999", website: "no", priority: "1", status: "prospecting", message: "Abou El Sid (Zamalek)! Iconic Egyptian with old-world charm. We help heritage restaurants modernize. DM? 🍽️✨", dateAdded: new Date().toISOString().split('T')[0] }
+            { name: "Zooba", type: "restaurant", instagram: "zooba", whatsapp: "201055555555", website: "yes", priority: "1", status: "prospecting", message: "Zooba! 57k followers + 50 Best Restaurants = iconic 🍽️ Even great brands deserve an even better website. We'd love to show you what a redesigned site could look like — FREE mockup, no strings attached, just to spark ideas. Worth a look? 🚀", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Felfela", type: "restaurant", instagram: "felfelaeg", whatsapp: "201066666666", website: "yes", priority: "2", status: "prospecting", message: "Felfela — a legend since 1959! 🍽️✨ A brand this iconic deserves a website that tells the whole story. We build websites for heritage restaurants and we'll do a FREE mockup first so you can see the design before anything else. Interested? 🤝", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Nights Restaurant & Bar", type: "restaurant", instagram: "caironightsrestaurant", whatsapp: "201077777777", website: "no", priority: "1", status: "prospecting", message: "Cairo Nights! With no website, you're invisible to so many potential guests 🍽️ We build websites for restaurants — menu, reservations, atmosphere — and we'll send you a FREE custom mockup so you can see exactly what it'd look like. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Maré Social", type: "restaurant", instagram: "maresocialrestaurant", whatsapp: "201088888888", website: "yes", priority: "2", status: "prospecting", message: "Maré Social! Upscale Portuguese dining needs a website that matches the experience 🍷🍽️ We build custom sites for fine dining restaurants and we'd love to send you a FREE mockup — your brand, elevated online. Quick chat? ✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Cairo Restaurant مطاعم القاهرة", type: "restaurant", instagram: "cairorestaurantx", whatsapp: "201093582879", website: "no", priority: "1", status: "prospecting", message: "Cairo Restaurant! Facebook presence + no website = a gap we can fill 🍽️ We build websites for restaurants and we'll do a FREE mockup first — no cost, no commitment — so you can see exactly what it'd look like before deciding. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Hawawshy El Refai", type: "restaurant", instagram: "hawawshy_refai_cairo", whatsapp: "201044444444", website: "no", priority: "1", status: "prospecting", message: "Hawawshy El Refai! Cult favorite + word-of-mouth legend 🌮 A website would turn that love into even more orders and new customers. We'll build it — and we'll send you a FREE custom mockup first so you can see the design before saying yes. Talk? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Somaya (Fasahet Somaya)", type: "restaurant", instagram: "faasahet_somaya", whatsapp: "201055555666", website: "no", priority: "1", status: "prospecting", message: "Somaya! Daily rotating menus on Instagram = an engaged, hungry audience 🍽️ A website would let you show the full menu, take orders, and reach even more people. We'll build it and send you a FREE custom mockup first. Interested? ✨", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Tabkhaa Space", type: "restaurant", instagram: "tabkhaa_space", whatsapp: "201066666777", website: "no", priority: "1", status: "prospecting", message: "Tabkhaa Space! Authentic homemade Egyptian + loyal Instagram following 🍽️ A website would take you from local favorite to city-wide name. We build them for restaurants like yours — and we'll send you a FREE mockup first so you can see it before committing. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Granita Cafe", type: "cafe", instagram: "granita_cairo", whatsapp: "201077777888", website: "no", priority: "1", status: "prospecting", message: "Granita! 1930s-inspired concept + beautiful garden space = premium brand ☕🌿 That aesthetic absolutely deserves a website to match. We'd love to build it — starting with a FREE custom mockup designed just for you. Chat? 💬", dateAdded: new Date().toISOString().split('T')[0] },
+            { name: "Abou El Sid", type: "restaurant", instagram: "abou_el_sid", whatsapp: "201088888999", website: "no", priority: "1", status: "prospecting", message: "Abou El Sid (Zamalek)! Old-world charm + iconic Egyptian cuisine 🍽️✨ Your brand story deserves a proper website that does it justice. We build them for heritage restaurants — and we'll send you a FREE mockup first so you can see the design before anything. DM? 💬", dateAdded: new Date().toISOString().split('T')[0] }
         ];
 
-        let leads = JSON.parse(localStorage.getItem('cafeRestaurantLeads')) || initialLeads;
+        let leads = JSON.parse(localStorage.getItem('cafeRestaurantLeads')) || [];
         let editingIndex = -1;
-        
-        if (!localStorage.getItem('cafeRestaurantLeads')) {
-            localStorage.setItem('cafeRestaurantLeads', JSON.stringify(leads));
-        }
+
+        // Merge: add any initialLeads not already stored, and refresh messages for existing ones
+        const storedNames = new Map(leads.map(l => [l.name.toLowerCase(), l]));
+        initialLeads.forEach(init => {
+            const existing = storedNames.get(init.name.toLowerCase());
+            if (!existing) {
+                leads.push(init);
+            } else {
+                // Update the message to the new website/mockup pitch
+                existing.message = init.message;
+            }
+        });
+        if (leads.length === 0) leads = initialLeads;
+        localStorage.setItem('cafeRestaurantLeads', JSON.stringify(leads));
         
         function openAddModal() {
             editingIndex = -1;
@@ -666,31 +855,31 @@
                 
                 return `
                     <tr>
-                        <td class="cafe-name">${lead.name}</td>
-                        <td style="font-size: 10px; text-transform: capitalize;">${lead.type}</td>
-                        <td>
+                        <td class="cafe-name" data-label="Name">${lead.name}</td>
+                        <td data-label="Type" style="font-size: 10px; text-transform: capitalize;">${lead.type}</td>
+                        <td data-label="Instagram">
                             ${lead.instagram ? `<a href="${instagramUrl}" target="_blank" class="instagram-link">@${lead.instagram}</a>` : '—'}
                         </td>
-                        <td>
+                        <td data-label="WhatsApp">
                             ${lead.whatsapp ? `<a href="${whatsappUrl}" target="_blank" class="whatsapp-btn">Message</a>` : '—'}
                         </td>
-                        <td style="font-size: 10px;">
+                        <td data-label="Website" style="font-size: 10px;">
                             ${lead.website === 'no' ? '❌ None' : lead.website === 'yes' ? '✓ Yes' : lead.website === 'google_drive' ? '📄 Drive' : '🔗 Linktree'}
                         </td>
-                        <td>
+                        <td data-label="Priority">
                             <span class="priority-badge priority-${lead.priority}">
                                 P${lead.priority}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Status">
                             <span class="status-badge status-${lead.status}">
                                 ${lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Message">
                             <button class="copy-msg-btn" onclick="copyMessage(${actualIdx})">Copy</button>
                         </td>
-                        <td>
+                        <td data-label="Actions">
                             <button onclick="editLead(${actualIdx})" style="background: #667eea; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; margin-right: 4px; font-size: 10px;">Edit</button>
                             <button onclick="deleteLead(${actualIdx})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">Del</button>
                         </td>
@@ -744,6 +933,13 @@
         document.getElementById('typeFilter').addEventListener('change', renderTable);
         document.getElementById('priorityFilter').addEventListener('change', renderTable);
         document.getElementById('statusFilter').addEventListener('change', renderTable);
+
+        function toggleFindLeads() {
+            const panel = document.getElementById('findLeadsPanel');
+            const btn = document.getElementById('findLeadsBtn');
+            const open = panel.classList.toggle('active');
+            btn.textContent = open ? '✕ Close' : '🔍 Find Leads';
+        }
         
         window.addEventListener('click', (e) => {
             const modal = document.getElementById('addModal');
